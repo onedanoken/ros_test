@@ -1,1 +1,12 @@
-
+*
+!*/
+!.gitignore
+!.gitattributes
+!.gitmodules
+!CMakeLists.txt
+!package.xml
+!*.cpp
+!*.hpp
+!*.h
+!*.py
+!*.yaml
