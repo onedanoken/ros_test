@@ -2,6 +2,10 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 
 
+directory_path = "/home/iurbanovitch/ros2_ws/src/ros_test"
+params_path = "/params"
+
+
 def generate_launch_description():
     return LaunchDescription([
         Node(
@@ -11,8 +15,7 @@ def generate_launch_description():
             output="screen",
             emulate_tty=True,
             parameters=[
-                "/home/iurbanovitch/ros2_ws/src/ros_test \
-                /params/first_node.yaml"
+                directory_path + params_path + "/first_node.yaml"
             ]
         ),
         Node(
@@ -22,8 +25,7 @@ def generate_launch_description():
             output="screen",
             emulate_tty=True,
             parameters=[
-                "/home/iurbanovitch/ros2_ws/src/ros_test \
-                /params/second_node.yaml"
+                directory_path + params_path + "/first_node.yaml"
             ]
         )
     ])
