@@ -4,10 +4,11 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
-static const uint8_t c_n_sec = 3;
+
 static const std::string c_topic_publisher = "publisher";
 static const std::string c_topic_subscriber = "subscription";
 static const uint8_t c_queue_size = 10;
+static const std::string c_queue_size_parameter = "queue_size_param";
 static const std::string c_second_node_msg = "Funny!";
 
 class SecondNode : public rclcpp::Node
@@ -16,11 +17,16 @@ public:
   SecondNode()
   : Node("second_node")
   {
-    _ppublisher = this->create_publisher<std_msgs::msg::String>(c_topic_subscriber, c_queue_size);
+     this->declare_parameter(c_queue_size_parameter, 20);
+     _queue_size = this->get_parameter(c_queue_size_parameter).as_int();
+    _ppublisher = this->create_publisher<std_msgs::msg::String>(c_topic_subscriber, _queue_size);
     _psubscription = this->create_subscription<std_msgs::msg::String>(
       c_topic_publisher, c_queue_size,
       std::bind(&SecondNode::topic_callback, this, std::placeholders::_1));
   }
+
+private:
+  int8_t _queue_size;
 
 private:
   void topic_callback(const std_msgs::msg::String & msg) const
