@@ -1,4 +1,0 @@
-/second_node:
-  ros__parameters:
-    timer_param : 1
-    queue_size_param : 10

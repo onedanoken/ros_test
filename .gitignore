@@ -2,6 +2,10 @@ build
 install
 log
 __pycache__
+.vscode
+resource
+test
+ros_python/__init__.py
 *.d
 *.o
 *.ko
