@@ -1,28 +1,14 @@
-#include <chrono>
-#include <functional>
-#include <memory>
-#include <string>
-
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+#include "base_node.hpp"
 
 
-static const std::string c_topic_publisher = "publisher";
-static const std::string c_topic_subscriber = "subscription";
-static const uint8_t c_n_sec = 5;
-static const uint8_t c_queue_size = 10;
-static const std::string c_n_parameter = "timer_param";
-static const std::string c_queue_size_parameter = "queue_size_param";
-static const std::string c_first_node_msg = "Hello, I'm Alive!";
-
-class FirstNode : public rclcpp::Node
+class FirstNode : public BaseNode
 {
 public:
   FirstNode()
-  : Node("first_node")
+  : BaseNode(c_first_node_name)
   {
-    this->declare_parameter(c_n_parameter, 15);
-    this->declare_parameter(c_queue_size_parameter, 20);
+    this->declare_parameter(c_n_parameter, c_n_test_sec);
+    this->declare_parameter(c_queue_size_parameter, c_queue_size_test);
     _n_sec = this->get_parameter(c_n_parameter).as_int();
     _queue_size = this->get_parameter(c_queue_size_parameter).as_int();
     _ppublisher = this->create_publisher<std_msgs::msg::String>(c_topic_publisher, _queue_size);
@@ -32,10 +18,6 @@ public:
     _ptimer = this->create_wall_timer(
       std::chrono::seconds(_n_sec), std::bind(&FirstNode::timer_callback, this));
   }
-
-private:
-  uint8_t _n_sec;
-  uint8_t _queue_size;
 
 private:
   void timer_callback()
@@ -51,9 +33,4 @@ private:
   {
     RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());
   }
-
-private:
-  rclcpp::TimerBase::SharedPtr _ptimer;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr _ppublisher;
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr _psubscription;
 };
