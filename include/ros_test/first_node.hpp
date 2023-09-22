@@ -9,8 +9,8 @@ public:
   {
     this->declare_parameter(c_n_parameter, c_n_test_sec);
     this->declare_parameter(c_queue_size_parameter, c_queue_size_test);
-    _n_sec = this->get_parameter(c_n_parameter).as_int();
-    _queue_size = this->get_parameter(c_queue_size_parameter).as_int();
+    _n_sec = static_cast<uint8_t>(this->get_parameter(c_n_parameter).as_int());
+    _queue_size = static_cast<uint8_t>(this->get_parameter(c_queue_size_parameter).as_int());
     _ppublisher = this->create_publisher<std_msgs::msg::String>(c_topic_publisher, _queue_size);
     _psubscription = this->create_subscription<std_msgs::msg::String>(
       c_topic_subscriber, _queue_size,
