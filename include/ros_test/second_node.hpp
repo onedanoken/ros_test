@@ -1,32 +1,19 @@
-#include <memory>
-#include <iostream>
-
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+#include "base_node.hpp"
 
 
-static const std::string c_topic_publisher = "publisher";
-static const std::string c_topic_subscriber = "subscription";
-static const uint8_t c_queue_size = 10;
-static const std::string c_queue_size_parameter = "queue_size_param";
-static const std::string c_second_node_msg = "Funny!";
-
-class SecondNode : public rclcpp::Node
+class SecondNode : public BaseNode
 {
 public:
   SecondNode()
-  : Node("second_node")
+  : BaseNode(c_second_node_name)
   {
-     this->declare_parameter(c_queue_size_parameter, 20);
-     _queue_size = this->get_parameter(c_queue_size_parameter).as_int();
+    this->declare_parameter(c_queue_size_parameter, c_queue_size_test);
+    _queue_size = static_cast<uint8_t>(this->get_parameter(c_queue_size_parameter).as_int());
     _ppublisher = this->create_publisher<std_msgs::msg::String>(c_topic_subscriber, _queue_size);
     _psubscription = this->create_subscription<std_msgs::msg::String>(
-      c_topic_publisher, c_queue_size,
+      c_topic_publisher, _queue_size,
       std::bind(&SecondNode::topic_callback, this, std::placeholders::_1));
   }
-
-private:
-  int8_t _queue_size;
 
 private:
   void topic_callback(const std_msgs::msg::String & msg) const
@@ -38,8 +25,4 @@ private:
     RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
     _ppublisher->publish(message);
   }
-
-private:
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr _ppublisher;
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr _psubscription;
 };

@@ -11,7 +11,7 @@ def generate_launch_description():
         Node(
             package="ros_test",
             executable="talker",
-            name="first_node",
+            # name="first_node",
             output="screen",
             emulate_tty=True,
             parameters=[
@@ -21,11 +21,11 @@ def generate_launch_description():
         Node(
             package='ros_test',
             executable='listener',
-            name='second_node',
+            # name='second_node',
             output="screen",
             emulate_tty=True,
             parameters=[
-                directory_path + params_path + "/first_node.yaml"
+                directory_path + params_path + "/second_node.yaml"
             ]
         )
     ])
